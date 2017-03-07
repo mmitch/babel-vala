@@ -1,8 +1,8 @@
-;;; ob-template.el --- org-babel functions for template evaluation
+;;; ob-vala.el --- org-babel functions for Vala evaluation
 
-;; Copyright (C) your name here
+;; Copyright (C) 2017 Christian Garbs <mitch@cgarbs.de>
 
-;; Author: your name here
+;; Author: Christian Garbs <mitch@cgarbs.de>
 ;; Keywords: literate programming, reproducible research
 ;; Homepage: http://orgmode.org
 ;; Version: 0.01
@@ -58,24 +58,26 @@
 ;; possibly require modes required for your language
 
 ;; optionally define a file extension for this language
-(add-to-list 'org-babel-tangle-lang-exts '("template" . "tmp"))
+(add-to-list 'org-babel-tangle-lang-exts '("vala" . "vala"))
 
 ;; optionally declare default header arguments for this language
-(defvar org-babel-default-header-args:template '())
+(defvar org-babel-default-header-args:vala '())
 
 ;; This function expands the body of a source code block by doing
 ;; things like prepending argument definitions to the body, it should
-;; be called by the `org-babel-execute:template' function below.
-(defun org-babel-expand-body:template (body params &optional processed-params)
+;; be called by the `org-babel-execute:vala' function below.
+(defun org-babel-expand-body:vala (body params &optional processed-params)
   "Expand BODY according to PARAMS, return the expanded body."
-  (require 'inf-template)
-  (let ((vars (nth 1 (or processed-params (org-babel-process-params params)))))
-    (concat
-     (mapconcat ;; define any variables
-      (lambda (pair)
-        (format "%s=%S"
-                (car pair) (org-babel-template-var-to-template (cdr pair))))
-      vars "\n") "\n" body "\n")))
+  body ;; TODO: do nothing for now, just return the original body
+  )
+  ;; (require 'inf-vala)
+  ;; (let ((vars (nth 1 (or processed-params (org-babel-process-params params)))))
+  ;;   (concat
+  ;;    (mapconcat ;; define any variables
+  ;;     (lambda (pair)
+  ;;       (format "%s=%S"
+  ;;               (car pair) (org-babel-vala-var-to-vala (cdr pair))))
+  ;;     vars "\n") "\n" body "\n")))
 
 ;; This is the main function which is called to evaluate a code
 ;; block.
@@ -96,58 +98,91 @@
 ;; "session" evaluation).  Also you are free to define any new header
 ;; arguments which you feel may be useful -- all header arguments
 ;; specified by the user will be available in the PARAMS variable.
-(defun org-babel-execute:template (body params)
-  "Execute a block of Template code with org-babel.
+(defun org-babel-execute:vala (body params)
+  "Execute a block of Vala code with org-babel.
 This function is called by `org-babel-execute-src-block'"
-  (message "executing Template source code block")
-  (let* ((processed-params (org-babel-process-params params))
-         ;; set the session if the session variable is non-nil
-         (session (org-babel-template-initiate-session (first processed-params)))
-         ;; variables assigned for use in the block
-         (vars (second processed-params))
-         (result-params (third processed-params))
-         ;; either OUTPUT or VALUE which should behave as described above
-         (result-type (fourth processed-params))
-         ;; expand the body with `org-babel-expand-body:template'
-         (full-body (org-babel-expand-body:template
-                     body params processed-params)))
-    ;; actually execute the source-code block either in a session or
-    ;; possibly by dropping it to a temporary file and evaluating the
-    ;; file.
-    ;; 
-    ;; for session based evaluation the functions defined in
-    ;; `org-babel-comint' will probably be helpful.
-    ;;
-    ;; for external evaluation the functions defined in
-    ;; `org-babel-eval' will probably be helpful.
-    ;;
-    ;; when forming a shell command, or a fragment of code in some
-    ;; other language, please preprocess any file names involved with
-    ;; the function `org-babel-process-file-name'. (See the way that
-    ;; function is used in the language files)
+  (message "executing Vala source code block")
+  (let* ((tmp-src-file (org-babel-temp-file
+			"vala-src-"
+			".vala"))
+         (tmp-bin-file (org-babel-temp-file "vala-bin-" org-babel-exeext))
+         (cmdline (cdr (assoc :cmdline params)))
+         (flags (cdr (assoc :flags params)))
+         (full-body (org-babel-expand-body:vala body params))
+         (compile
+	  (progn
+	    (with-temp-file tmp-src-file (insert full-body))
+	    (org-babel-eval
+	     (format "valac %s -o %s"
+		     (org-babel-process-file-name tmp-src-file)
+		     (org-babel-process-file-name tmp-bin-file)) "")))
+	 (message "compiled")
+	 )
+    (let ((results
+           (org-babel-trim
+            (org-babel-eval
+             (concat tmp-bin-file (if cmdline (concat " " cmdline) "")) ""))))
+      (org-babel-reassemble-table
+       (org-babel-result-cond (cdr (assoc :result-params params))
+	 (org-babel-read results)
+         (let ((tmp-file (org-babel-temp-file "vala-")))
+           (with-temp-file tmp-file (insert results))
+           (org-babel-import-elisp-from-file tmp-file)))
+       (org-babel-pick-name
+        (cdr (assoc :colname-names params)) (cdr (assoc :colnames params)))
+       (org-babel-pick-name
+        (cdr (assoc :rowname-names params)) (cdr (assoc :rownames params)))
+       ))
     ))
+;; (let* ((processed-params (org-babel-process-params params))
+;;          ;; set the session if the session variable is non-nil
+;;          (session (org-babel-vala-initiate-session (first processed-params)))
+;;          ;; variables assigned for use in the block
+;;          (vars (second processed-params))
+;;          (result-params (third processed-params))
+;;          ;; either OUTPUT or VALUE which should behave as described above
+;;          (result-type (fourth processed-params))
+;;          ;; expand the body with `org-babel-expand-body:vala'
+;;          (full-body (org-babel-expand-body:vala
+;;                      body params processed-params)))
+;;     ;; actually execute the source-code block either in a session or
+;;     ;; possibly by dropping it to a temporary file and evaluating the
+;;     ;; file.
+;;     ;;
+;;     ;; for session based evaluation the functions defined in
+;;     ;; `org-babel-comint' will probably be helpful.
+;;     ;;
+;;     ;; for external evaluation the functions defined in
+;;     ;; `org-babel-eval' will probably be helpful.
+;;     ;;
+;;     ;; when forming a shell command, or a fragment of code in some
+;;     ;; other language, please preprocess any file names involved with
+;;     ;; the function `org-babel-process-file-name'. (See the way that
+;;     ;; function is used in the language files)
+;;     ))
 
 ;; This function should be used to assign any variables in params in
 ;; the context of the session environment.
-(defun org-babel-prep-session:template (session params)
-  "Prepare SESSION according to the header arguments specified in PARAMS."
-  )
+(defun org-babel-prep-session:vala (session params)
+  "This function does nothing as Vala is a compiled language with no
+support for sessions"
+  (error "Vala is a compiled language -- no support for sessions"))
 
-(defun org-babel-template-var-to-template (var)
-  "Convert an elisp var into a string of template source code
+(defun org-babel-vala-var-to-vala (var)
+  "Convert an elisp var into a string of vala source code
 specifying a var of the same value."
   (format "%S" var))
 
-(defun org-babel-template-table-or-string (results)
+(defun org-babel-vala-table-or-string (results)
   "If the results look like a table, then convert them into an
 Emacs-lisp table, otherwise return the results as a string."
   )
 
-(defun org-babel-template-initiate-session (&optional session)
+(defun org-babel-vala-initiate-session (&optional session)
   "If there is not a current inferior-process-buffer in SESSION then create.
 Return the initialized session."
   (unless (string= session "none")
     ))
 
-(provide 'ob-template)
-;;; ob-template.el ends here
+(provide 'ob-vala)
+;;; ob-vala.el ends here
