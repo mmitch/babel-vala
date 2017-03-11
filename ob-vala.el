@@ -117,10 +117,12 @@ This function is called by `org-babel-execute-src-block'"
 	  (progn
 	    (with-temp-file tmp-src-file (insert full-body))
 	    (org-babel-eval
-	     (format "%s %s -o %s"
+	     (format "%s %s -o %s %s"
 		     org-babel-vala-compiler
-		     (org-babel-process-file-name tmp-src-file)
-		     (org-babel-process-file-name tmp-bin-file)) "")))
+		     (mapconcat 'identity
+				(if (listp flags) flags (list flags)) " ")
+		     (org-babel-process-file-name tmp-bin-file)
+		     (org-babel-process-file-name tmp-src-file)) "")))
 	 (message "compiled")
 	 )
     (let ((results
