@@ -63,6 +63,10 @@
 ;; optionally declare default header arguments for this language
 (defvar org-babel-default-header-args:vala '())
 
+(defvar org-babel-vala-compiler "valac"
+  "Command used to compile a Vala source code file into an
+executable.")
+
 ;; This function expands the body of a source code block by doing
 ;; things like prepending argument definitions to the body, it should
 ;; be called by the `org-babel-execute:vala' function below.
@@ -113,7 +117,8 @@ This function is called by `org-babel-execute-src-block'"
 	  (progn
 	    (with-temp-file tmp-src-file (insert full-body))
 	    (org-babel-eval
-	     (format "valac %s -o %s"
+	     (format "%s %s -o %s"
+		     org-babel-vala-compiler
 		     (org-babel-process-file-name tmp-src-file)
 		     (org-babel-process-file-name tmp-bin-file)) "")))
 	 (message "compiled")
