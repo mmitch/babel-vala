@@ -85,6 +85,7 @@ executed and the result added to your file:
 (The result is in tabular format by default because `,` is a
 delimiter.)
 
+See `examples.org` for further examples.
 
 
 [Vala]: https://wiki.gnome.org/Projects/Vala
