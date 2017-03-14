@@ -123,7 +123,6 @@ This function is called by `org-babel-execute-src-block'"
 				(if (listp flags) flags (list flags)) " ")
 		     (org-babel-process-file-name tmp-bin-file)
 		     (org-babel-process-file-name tmp-src-file)) "")))
-	 (message "compiled")
 	 )
     (let ((results
            (org-babel-trim
