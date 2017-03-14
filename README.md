@@ -17,10 +17,11 @@ These things work:
 
 - compile and run a simple Vala class (like one that prints `hello world`)
 - capture the output of the executed code as a `#+RESULTS:`
+- pass parameters to compiler/linker via `:flags`
+- pass commandline arguments to the executed binary via `:cmdline`
 
 These things don't work:
 
-- pass parameters to compiler/linker [planned]
 - automatically wrap naked code lines with a class and main method
 - parameter expansion
 - session support (because Vala is compiled and has no interpreter)
