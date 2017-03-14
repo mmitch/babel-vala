@@ -124,22 +124,23 @@ This function is called by `org-babel-execute-src-block'"
 		     (org-babel-process-file-name tmp-bin-file)
 		     (org-babel-process-file-name tmp-src-file)) "")))
 	 )
-    (let ((results
-           (org-babel-trim
-            (org-babel-eval
-             (concat tmp-bin-file (if cmdline (concat " " cmdline) "")) ""))))
-      (org-babel-reassemble-table
-       (org-babel-result-cond (cdr (assoc :result-params params))
-	 (org-babel-read results)
-         (let ((tmp-file (org-babel-temp-file "vala-")))
-           (with-temp-file tmp-file (insert results))
-           (org-babel-import-elisp-from-file tmp-file)))
-       (org-babel-pick-name
-        (cdr (assoc :colname-names params)) (cdr (assoc :colnames params)))
-       (org-babel-pick-name
-        (cdr (assoc :rowname-names params)) (cdr (assoc :rownames params)))
-       ))
-    ))
+    (if (file-executable-p tmp-bin-file)
+	(let ((results
+	       (org-babel-trim
+		(org-babel-eval
+		 (concat tmp-bin-file (if cmdline (concat " " cmdline) "")) ""))))
+	  (org-babel-reassemble-table
+	   (org-babel-result-cond (cdr (assoc :result-params params))
+	     (org-babel-read results)
+	     (let ((tmp-file (org-babel-temp-file "vala-")))
+	       (with-temp-file tmp-file (insert results))
+	       (org-babel-import-elisp-from-file tmp-file)))
+	   (org-babel-pick-name
+	    (cdr (assoc :colname-names params)) (cdr (assoc :colnames params)))
+	   (org-babel-pick-name
+	    (cdr (assoc :rowname-names params)) (cdr (assoc :rownames params)))
+	   ))
+      )))
 ;; (let* ((processed-params (org-babel-process-params params))
 ;;          ;; set the session if the session variable is non-nil
 ;;          (session (org-babel-vala-initiate-session (first processed-params)))
