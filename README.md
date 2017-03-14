@@ -38,14 +38,23 @@ it to your [load-path] by adding this line to your `~/.emacs` file:
 (add-to-list 'load-path "~/.emacs.d/lisp/")
 ```
 
-You can then automatically load `ob-vala.el` on Emacs startup by also
-adding
+If you need Vala support all the time, you can automatically load
+`ob-vala.el` on every Emacs startup by also adding
 
 ```elisp
 (require 'op-vala)
 ```
 
 to your `~/.emacs`.
+
+If you need Vala support only occasionally, you can instead add this
+footer to your `.org` files that contain Vala code:
+
+```elisp
+# Local Variables:
+# eval: (require 'ob-vala)
+# End:
+```
 
 
 usage
