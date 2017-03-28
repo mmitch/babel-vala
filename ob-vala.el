@@ -127,11 +127,5 @@ specifying a var of the same value."
 Emacs-lisp table, otherwise return the results as a string."
   )
 
-(defun org-babel-vala-initiate-session (&optional session)
-  "If there is not a current inferior-process-buffer in SESSION then create.
-Return the initialized session."
-  (unless (string= session "none")
-    ))
-
 (provide 'ob-vala)
 ;;; ob-vala.el ends here
