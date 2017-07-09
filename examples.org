@@ -78,7 +78,7 @@ vala compiler so the =#if FOO= compilation option is used.
 #+END_SRC
 
 #+RESULTS:
-: No foo
+: Foo
 
 
 ** GTK example
