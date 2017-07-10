@@ -2,9 +2,9 @@
 #+STARTUP:    align fold nodlcheck hidestars oddeven lognotestate hideblocks
 #+SEQ_TODO:   TODO(t) INPROGRESS(i) WAITING(w@) | DONE(d) CANCELED(c@)
 #+TAGS:       Write(w) Update(u) Fix(f) Check(c) noexport(n)
-#+TITLE:      Language Source Code Blocks in Org Mode
-#+AUTHOR:     Your name
-#+EMAIL:      you[at]email[dot]org
+#+TITLE:      Vala Source Code Blocks in Org Mode
+#+AUTHOR:     Christian Garbs
+#+EMAIL:      mitch[at]cgarbs[dot]de
 #+LANGUAGE:   en
 #+HTML_HEAD:      <style type="text/css">#outline-container-introduction{ clear:both; }</style>
 #+LINK_UP:    ../languages.html
@@ -15,30 +15,27 @@
 #+begin_export html
   <div id="subtitle" style="float: center; text-align: center;">
   <p>
-  Org Mode support for <a href="http://language-site/">Language</a>
+  Org Mode support for <a href="https://wiki.gnome.org/Projects/Vala">Vala</a>
   </p>
-  <p>
-  <a href="http://language-site/">
-  <img src="http://language-site/graphic.file"/>
-  </a>
-  </p>
+  <!-- Vala has no logo, see https://wiki.gnome.org/Projects/Vala/Logo -->
   </div>
 #+end_export
 
-* Template Checklist [0/13]                                        :noexport:
-  - [ ] Revise #+TITLE:
-  - [ ] Indicate #+AUTHOR:
-  - [ ] Add #+EMAIL:
-  - [ ] Revise banner source block [0/3]
-    - [ ] Add link to a useful language web site
-    - [ ] Replace "Language" with language name
-    - [ ] Find a suitable graphic and use it to link to the language
-      web site
+* Template Checklist [5/12] 					   :noexport:
+  - [X] Revise #+TITLE:
+  - [X] Indicate #+AUTHOR:
+  - [-] Add #+EMAIL:
+    - [-] check format: template used [at] and [dot] – placeholders or intent?
+  - [X] Revise banner source block [3/3]
+    - [X] Add link to a useful language web site
+    - [X] Replace "Language" with language name
+    - [X] Find a suitable graphic and use it to link to the language
+      web site => there is none!
   - [ ] Write an [[Introduction]]
   - [ ] Describe [[Requirements%20and%20Setup][Requirements and Setup]]
-  - [ ] Replace "Language" with language name in [[Org%20Mode%20Features%20for%20Language%20Source%20Code%20Blocks][Org Mode Features for Language Source Code Blocks]]
+  - [X] Replace "Language" with language name in [[Org%20Mode%20Features%20for%20Language%20Source%20Code%20Blocks][Org Mode Features for Language Source Code Blocks]]
   - [ ] Describe [[Header%20Arguments][Header Arguments]]
-  - [ ] Describe support for [[Sessions]]
+  - [X] Describe support for [[Sessions]]
   - [ ] Describe [[Result%20Types][Result Types]]
   - [ ] Describe [[Other]] differences from supported languages
   - [ ] Provide brief [[Examples%20of%20Use][Examples of Use]]
@@ -49,13 +46,12 @@
   - Installation and configuration of language software
   - Emacs configuration
   - Org-mode configuration (org-babel-do-load-languages)
-* Org Mode Features for Language Source Code Blocks
+* Org Mode Features for Vala Source Code Blocks
 ** Header Arguments
-   - Language-specific default values
-   - Language-specific header arguments
+   - Vala-specific default values
+   - Vala-specific header arguments
 ** Sessions
-   - Support or not
-   - Typical use for sessions
+As Vala is a compiled language, there is no support for sessions.
 ** Result Types
    - Which result types are supported?
 ** Other
