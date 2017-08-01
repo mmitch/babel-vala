@@ -43,7 +43,7 @@ If you need Vala support all the time, you can automatically load
 `ob-vala.el` on every Emacs startup by also adding
 
 ```elisp
-(require 'op-vala)
+(require 'ob-vala)
 ```
 
 to your `~/.emacs`.
