@@ -5,7 +5,7 @@ This project has been merged to Org!
 ------------------------------------
 
 `ob-vala.el` has been accepted in upstream [Org] starting with
-version 9.1.  Org in turn is part of the official [Emacs] releases, so
+version 9.1.  [Org] in turn is part of the official [Emacs] releases, so
 `ob-vala.el` will show up there as well.  As of now, this repository
 is outdated and will not be updated.  Please refer to the [Org]
 project instead.
@@ -24,5 +24,6 @@ within an [Org] text file.
 
 
 [Vala]: https://wiki.gnome.org/Projects/Vala
+[Babel]: http://orgmode.org/worg/org-contrib/babel/
 [Emacs]: https://www.gnu.org/software/emacs/
 [Org]: http://orgmode.org
